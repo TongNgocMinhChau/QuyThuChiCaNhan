@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#171626">
+  <meta name="description" content="Quản lý thu chi cá nhân với nhiều quỹ, lịch và báo cáo.">
+  <title>Quỹ Thu Chi Cá Nhân</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div><span class="eyebrow">QUẢN LÝ TÀI CHÍNH</span><h1>Quỹ của tôi</h1></div>
+      </div>
+      <button class="icon-btn" id="themeBtn" aria-label="Đổi màu giao diện" title="Đổi màu giao diện">◐</button>
+    </header>
+
+    <main>
+      <section class="overview panel">
+        <div class="section-heading"><div><span class="eyebrow">TỔNG QUAN</span><h2>Tài chính của bạn</h2></div><span class="live-dot">● Đang hoạt động</span></div>
+        <div class="balance-label">Tổng số dư tất cả quỹ</div>
+        <div class="total-balance" id="allBalance">0 ₫</div>
+        <div class="summary-grid">
+          <div class="summary-card income"><span>↗ Tổng thu</span><strong id="allIncome">0 ₫</strong></div>
+          <div class="summary-card expense"><span>↘ Tổng chi</span><strong id="allExpense">0 ₫</strong></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><div><span class="eyebrow">PHÂN BỔ NGÂN SÁCH</span><h2>Các quỹ của bạn</h2></div><button class="text-btn" id="addFundBtn">＋ Tạo quỹ</button></div>
+        <div class="fund-scroller" id="fundList"></div>
+      </section>
+
+      <section class="selected-fund panel">
+        <div class="fund-title-row">
+          <div class="fund-icon" id="selectedIcon">💰</div>
+          <div class="fund-name-wrap"><span class="eyebrow">QUỸ ĐANG CHỌN</span><h2 id="selectedFundName">Quỹ cá nhân</h2></div>
+          <button class="dots-btn" id="fundMenuBtn" aria-label="Tùy chọn quỹ">•••</button>
+        </div>
+        <div class="fund-balance" id="fundBalance">0 ₫</div>
+        <div class="fund-stats"><span>Thu <b class="positive" id="fundIncome">0 ₫</b></span><span>Chi <b class="negative" id="fundExpense">0 ₫</b></span></div>
+        <div class="action-row">
+          <button class="primary-action" id="addExpenseBtn"><span>−</span> Khoản chi</button>
+          <button class="secondary-action" id="addIncomeBtn"><span>＋</span> Khoản thu</button>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><div><span class="eyebrow">DÒNG TIỀN</span><h2>Giao dịch gần đây</h2></div><button class="text-btn" id="seeAllBtn">Xem tất cả ↗</button></div>
+        <div class="transactions panel" id="transactionList"></div>
+      </section>
+
+      <section class="section-block calendar-section">
+        <div class="section-heading"><div><span class="eyebrow">THEO DÕI THỜI GIAN</span><h2>Lịch thu chi</h2></div></div>
+        <div class="panel calendar-panel">
+          <div class="calendar-head"><button class="icon-btn small" id="prevMonth">‹</button><strong id="monthLabel"></strong><button class="icon-btn small" id="nextMonth">›</button></div>
+          <div class="calendar-grid weekdays"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+          <div class="calendar-grid" id="calendarDays"></div>
+          <div class="calendar-legend"><span><i class="legend-dot income-dot"></i> Thu</span><span><i class="legend-dot expense-dot"></i> Chi</span></div>
+          <div class="day-detail"><div class="day-detail-head"><strong id="dayTitle">Giao dịch trong ngày</strong><span id="dayTotal">0 ₫</span></div><div id="dayTransactions" class="day-transactions"></div></div>
+        </div>
+      </section>
+
+      <section class="section-block report-section">
+        <div class="section-heading"><div><span class="eyebrow">BÁO CÁO</span><h2>Tháng này</h2></div></div>
+        <div class="panel report-panel">
+          <div class="report-row"><span>Thu nhập</span><b class="positive" id="monthIncome">0 ₫</b></div>
+          <div class="report-track"><i id="incomeBar"></i></div>
+          <div class="report-row"><span>Chi tiêu</span><b class="negative" id="monthExpense">0 ₫</b></div>
+          <div class="report-track expense-track"><i id="expenseBar"></i></div>
+          <div class="report-foot"><span>Chênh lệch</span><strong id="monthNet">0 ₫</strong></div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-target="top"><span>⌂</span>Tổng quan</button>
+      <button class="nav-item" data-target="calendar-section"><span>▦</span>Lịch</button>
+      <button class="nav-item" data-target="report-section"><span>◔</span>Báo cáo</button>
+      <button class="nav-item" id="navAdd"><span>＋</span>Thêm mới</button>
+    </nav>
+  </div>
+
+  <dialog id="transactionDialog" class="modal">
+    <form id="transactionForm" method="dialog">
+      <div class="modal-head"><div><span class="eyebrow">GHI NHẬN GIAO DỊCH</span><h2 id="transactionModalTitle">Thêm khoản chi</h2></div><button type="button" class="close-btn" data-close="transactionDialog">×</button></div>
+      <div class="type-switch"><button type="button" class="type-btn selected expense-type" data-type="expense">− Tiền chi</button><button type="button" class="type-btn" data-type="income">＋ Tiền thu</button></div>
+      <label>Số tiền (₫)<input id="amountInput" type="number" min="1" step="1" placeholder="Ví dụ: 150000" required></label>
+      <label>Nội dung<input id="noteInput" maxlength="100" placeholder="Bạn đã chi/thu cho việc gì?" required></label>
+      <div class="form-row"><label>Ngày giao dịch<input id="dateInput" type="date" required></label><label>Danh mục<select id="categoryInput"></select></label></div>
+      <label>Quỹ<select id="fundInput"></select></label>
+      <div class="modal-actions"><button type="button" class="secondary-action" id="deleteTxBtn" style="display:none;color:var(--red)">Xóa</button><button type="button" class="secondary-action" data-close="transactionDialog">Hủy</button><button class="primary-action" type="submit">Lưu giao dịch</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="fundDialog" class="modal">
+    <form id="fundForm" method="dialog">
+      <div class="modal-head"><div><span class="eyebrow">TÙY CHỈNH NGÂN SÁCH</span><h2 id="fundModalTitle">Tạo quỹ mới</h2></div><button type="button" class="close-btn" data-close="fundDialog">×</button></div>
+      <label>Tên quỹ<input id="fundNameInput" maxlength="32" placeholder="Ví dụ: Tiết kiệm du lịch" required></label>
+      <label>Biểu tượng</label><div class="icon-picker" id="iconPicker"></div>
+      <label>Màu sắc</label><div class="color-picker" id="colorPicker"></div>
+      <div class="modal-actions"><button type="button" class="secondary-action" data-close="fundDialog">Hủy</button><button class="primary-action" type="submit">Lưu quỹ</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="menuDialog" class="modal compact-modal">
+    <div class="modal-head"><h2>Tùy chọn quỹ</h2><button class="close-btn" data-close="menuDialog">×</button></div>
+    <button class="menu-option" id="editFundBtn">✎　Sửa tên và giao diện quỹ</button>
+    <button class="menu-option danger-text" id="deleteFundBtn">⌫　Xóa quỹ này</button>
+  </dialog>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

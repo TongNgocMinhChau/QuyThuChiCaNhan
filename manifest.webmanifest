@@ -1,0 +1,19 @@
+{
+  "name": "Quỹ Thu Chi Cá Nhân",
+  "short_name": "Thu Chi",
+  "description": "Quản lý nhiều quỹ thu chi cá nhân",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#11111e",
+  "theme_color": "#171626",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
